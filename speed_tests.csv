@@ -1,0 +1,16 @@
+nlists,ncore,sec_elapsed,function,parallellization
+7,2,1065.88,percentile_bound,mclapply
+7,10,490.94,percentile_bound,mclapply
+7,20,481.12,percentile_bound,mclapply
+7,30,490.42,percentile_bound,mclapply
+7,40,491.78,percentile_bound,mclapply
+40,2,,percentile_bound,mclapply
+40,10,,percentile_bound,mclapply
+40,20,1118.778,percentile_bound,mclapply
+40,30,1199.896,percentile_bound,mclapply
+40,40,1224.076,percentile_bound,mclapply
+1,2,44.669,percentile_bound_ci,boot
+1,10,12.359,percentile_bound_ci,boot
+1,20,11.099,percentile_bound_ci,boot
+1,30,7.933,percentile_bound_ci,boot
+1,40,7.87,percentile_bound_ci,boot
