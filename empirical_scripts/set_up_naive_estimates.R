@@ -98,13 +98,13 @@ results_to_df <- function(result_list, binomial){
 
 fiftiethfun <- function(x){
   
-  fiftieth <- quantile_ci(observations = x$day, percentile = 0.5)
+  fiftieth <- phenesse::quantile_ci(observations = x$day, percentile = 0.5)
   return(fiftieth)
 }
 
 tenthfun <- function(x){
   
- tenth <- quantile_ci(observations = x$day, percentile = 0.1)
+ tenth <- phenesse::quantile_ci(observations = x$day, percentile = 0.1)
   return(tenth)
 }
 
@@ -121,4 +121,4 @@ obs_to_estimate <- function(binomial, lapplyfun){
 rm(m)
 rm(mm)
 rm(files)
-rm(annotated_df,cats,files_list,total_adult_buts)
+rm(annotated_df,cats,files_list)
