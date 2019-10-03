@@ -73,3 +73,7 @@ empirical_tenth_estimates <- rbind(Danaus_plexippus
                                       ,Papilio_cresphontes)
 
 
+
+write.csv(empirical_tenth_estimates, 
+          file = "Emperical_Results/naive_tenth_estimates_percCIs.csv", 
+          row.names = FALSE)
