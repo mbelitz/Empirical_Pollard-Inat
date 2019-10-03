@@ -98,16 +98,23 @@ results_to_df <- function(result_list, binomial){
 
 fiftiethfun <- function(x){
   
-  fiftieth <- phenesse::quantile_ci(observations = x$day, percentile = 0.5)
+  fiftieth <- phenesse::quantile_ci(observations = x$day, percentile = 0.5,bootstraps = 100000)
   return(fiftieth)
 }
 
 tenthfun <- function(x){
   
- tenth <- phenesse::quantile_ci(observations = x$day, percentile = 0.1)
+ tenth <- phenesse::quantile_ci(observations = x$day, percentile = 0.1,
+                                bootstraps = 100000, type = "bca")
   return(tenth)
 }
 
+tenthfunperc<- function(x){
+  
+  tenth <- phenesse::quantile_ci(observations = x$day, percentile = 0.1,
+                                 bootstraps = 100000, type = "perc")
+  return(tenth)
+}
 # function to get data frame and estimate value and make results to dataframe
 
 obs_to_estimate <- function(binomial, lapplyfun){
