@@ -1,4 +1,11 @@
+#Project:  butterfly flight phenology drivers from incidental and survey data
+#Survey data: NABMN surveys (pollardbase.org, Ohio)
+#Incidental data: iNaturalist & eButterfly (metrics provided by M Belitz, UF)
+#Elise Larsen, 2020-06 Updated through 2021-5
+#Georgetown University 
 #MS Figures
+##Here: All code needed to produce the figures in submitted manuscript.
+
 
 library(tidyverse)
 library(lubridate)
@@ -178,4 +185,81 @@ FIG2incid
 figure2 <- grid.arrange(FIG2survey, FIG2incid,  ncol = 2, nrow = 1)
 figure2
 ggsave("figs/Larsen_etal_Fig2.png", plot=figure2, width = 6, height = 2.5, dpi = 300, units = "in", device='png')
+
+
+###########################################
+##  FIGURE 3: Compare emergences to "day 0"
+
+day0.locs<-read_csv("data/day0regions.csv")
+day0<-read_csv("data/day0values.csv") %>%
+  pivot_longer(`DC`:`IA`, names_to = "region", values_to="doy0") %>%
+  rename(scientificName=Species)
+day0$scientificName[day0$scientificName=="Cupido comyntas"]<-"Everes conymtas"
+
+pheno10<-read_csv("data/emergence_indices.csv") %>% 
+  dplyr::select(scientificName:ihigh, ows) %>%  mutate(region=NA) 
+pheno10$scientificName[pheno10$scientificName=="Cupido comyntas"]<-"Everes conymtas"
+
+for(i in 1:nrow(day0.locs)) {
+  pheno10$region[pheno10$lat_bin==day0.locs$lat_bin[i] & pheno10$lon_bin== day0.locs$lon_bin[i]]<-day0.locs$region[i]
+}
+#table(pheno10$region)
+
+day0pheno<-merge(pheno10, day0, by=c("region","scientificName"), all.x=T) %>%
+  mutate(incidental=i.est-doy0, survey=p.est-doy0) %>%
+  dplyr::select(scientificName,year, lat_bin, lon_bin, region, incidental, survey) %>%
+  pivot_longer(incidental:survey, names_to="datasource", values_to="emerg.lag")
+day0pheno<-merge(day0pheno, splist[,c(1:2)], by="scientificName")
+
+
+(day0plot<-ggplot(data=day0pheno, aes(x=scientificName, y=emerg.lag, fill=datasource)) + 
+  geom_boxplot() + theme_light() + geom_hline(yintercept=7) + 
+  labs(title="", x="Species", y="# days (estimate - day0)") + 
+  scale_fill_manual(name="Data source:", labels=c("Incidental","Survey"), values=c("palegreen","dodgerblue3"),guide = guide_legend(reverse = TRUE)) + 
+  theme(legend.position='top', axis.text.x = element_text(size=8,face="italic",angle = 75, vjust = 1, hjust=1)) + 
+  scale_x_discrete(labels=sort(unique(day0pheno$sciname))) )
+
+ggsave("figs/Larsen_etal_Fig3.png", day0plot, width=6, height=5, units="in")
+
+day0lm1<-lm(emerg.lag~-1+scientificName+datasource, data=day0pheno)
+summary(day0lm1)
+#data sources not sig different but species ARE - apply traits?
+
+
+
+###########################################
+##  FIGURE 4: Phenometrics by overwinter stage
+pheno.long<-pheno10 %>%
+  pivot_longer(c(p.est,i.est), names_to="datasource", values_to="est.10")
+pheno.long$ows<-fct_relevel(pheno.long$ows,c("adult","pupa","larva","migrant"))
+
+
+(fig4a<-ggplot(data=pheno.long, aes(x=ows,y=est.10, fill=datasource) ) + 
+  geom_boxplot() + ylim(60,300) + 
+  scale_fill_manual(name="Data source:", labels=c("Incidental","Survey"), values=c("palegreen","dodgerblue3"),guide = FALSE)  + 
+  theme_classic() + labs(x="Overwinter stage", y="10% Estimate", tag="A") )
+
+pheno50.long<-read_csv("data/midseason_indices.csv")  %>%
+  dplyr::select(scientificName,p.est,i.est,ows) %>%
+  pivot_longer(c(p.est,i.est), names_to="datasource", values_to="est.50")
+pheno50.long$ows<-fct_relevel(pheno50.long$ows,c("adult","pupa","larva","migrant"))
+
+
+(fig4b<-ggplot(data=pheno50.long, aes(x=ows,y=est.50, fill=datasource) ) + 
+  geom_boxplot() + ylim(60,300) + 
+  scale_fill_manual(name="Data source:", labels=c("Incidental","Survey"), values=c("palegreen","dodgerblue3"),guide = guide_legend(reverse = FALSE) )  + 
+  theme_classic() + labs(x="Overwinter stage", y="50% Estimate", tag="B") )
+
+# Extract the legend. Returns a gtable
+leg4 <- as_ggplot(get_legend(fig4b))
+fig4b <- fig4b + theme(legend.position='none')
+
+
+##Combine panels into Figure 4:
+figure4 <- grid.arrange(fig4a, fig4b, leg4,  ncol = 3, nrow = 1, widths=c(3,3,1))
+figure4
+ggsave("figs/Larsen_etal_Fig4.png", plot=figure4, width = 6, height = 2.5, dpi = 300, units = "in", device='png')
+
+
+
 
