@@ -100,7 +100,7 @@ incid.map
 ##Combine panels into Figure 1:
 figure <- grid.arrange(survey.map, incid.map, leg, ncol = 1, nrow = 3, widths=c(5), heights=c(4,4,1.5))
 figure
-ggsave("figs/Larsen_etal_Fig1.png", plot=figure, width = 6, height = 5, dpi = 300, units = "in", device='png')
+ggsave("figs/Larsen_etal_Fig1.png", plot=figure, width = 7, height = 7, dpi = 300, units = "in", device='png')
 
 
 
