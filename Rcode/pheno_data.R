@@ -1,8 +1,11 @@
-#Parallel analyses of phenometrics from incidental & survey data
-#Survey: NABMN surveys (pollardbase.org, Ohio)
-#Incidental: iNaturalist & eButterfly (metrics provided by M Belitz, UF)
+#Project:  butterfly flight phenology drivers from incidental and survey data
+#Survey data: NABMN surveys (pollardbase.org, Ohio)
+#Incidental data: iNaturalist & eButterfly (metrics provided by M Belitz, UF)
 #Elise Larsen, 2020-06 Updated through 2021-5
 #Georgetown University 
+
+#Here: phenometrics & explanatory variables combined for analysis
+
 
 #libraries
 library(MASS)
@@ -38,13 +41,13 @@ load("data/pollard_indices.RData")
 pollard10<-pollardM %>%
   rename(p.nsites=nsites, p.nsurveys=nvisits, p.npresence=ncounts, 
          p.est=estimate10, plow=ci10.low95p, phigh=ci10.high95p) %>%
-  select(scientificName:phigh) %>%
+  dplyr::select(scientificName:phigh) %>%
   mutate(p.ci=phigh-plow, metric=10) 
 #select fields for 50% metrics, add width of confidence int.
 pollard50<-pollardM %>%
   rename( p.nsites=nsites, p.nsurveys=nvisits, p.npresence=ncounts, 
          p.est=estimate50, plow=ci50.low95p, phigh=ci50.high95p) %>%
-  select(scientificName:ci.repN,p.est:phigh) %>%
+  dplyr::select(scientificName:ci.repN,p.est:phigh) %>%
   mutate(p.ci=phigh-plow, metric=50) 
 
 #remove raw survey metrics table
@@ -58,7 +61,7 @@ traits<-read_excel("data/LarsenEtAl_Appendix1b.xlsx", sheet="spp_TRAITS_el") %>%
   filter(ows %in% c("adult","pupa","larva","migrant")) %>%
   mutate(ows=as.factor(ows),
          local.abund=as.factor(local.abund)) %>%
-  select(scientificName,mobility:local.abund,host.breadth.index,voltinism,ows,egg.clusters,detect,confus)
+  dplyr::select(scientificName,mobility:local.abund,host.breadth.index,voltinism,ows,egg.clusters,detect,confus)
   
 #refactor levels for overwinter stage, local abundance
 traits$ows<-fct_relevel(traits$ows,c("adult","pupa","larva","migrant"))
@@ -77,7 +80,7 @@ gdd<-gdd %>%
   #mutate(dv=1) %>% group_by(dv) %>%
   #mutate(mgd=mean(sumgdd, na.rm=T)) %>%
   #group_by(lat_bin, lon_bin, year) %>%   #mutate(gdd.dev=(log.gdd-mgd)/10) %>%
-  select(lat_bin, lon_bin, year, log.gdd)
+  dplyr::select(lat_bin, lon_bin, year, log.gdd)
 
 ##Combine variables in data frames for analysis
 
