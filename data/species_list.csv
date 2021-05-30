@@ -1,41 +1,41 @@
-scientificName,inat,intraits,survey,count
-Ancyloxypha numitor,1,1,1,3
-Asterocampa celtis,1,1,1,3
-Colias eurytheme,1,1,1,3
-Colias philodice,1,1,1,3
-Danaus plexippus,1,1,1,3
-Epargyreus clarus,1,1,1,3
-Erynnis baptisiae,1,1,1,3
-Euptoieta claudia,1,1,1,3
-Cupido comyntas,1,1,1,3
-Junonia coenia,1,1,1,3
-Limenitis archippus,1,1,1,3
-Limenitis arthemis astyanax,1,1,1,3
-Papilio glaucus,1,1,1,3
-Papilio polyxenes,1,1,1,3
-Papilio troilus,1,1,1,3
-Phyciodes tharos,1,1,1,3
-Pieris rapae,1,1,1,3
-Polites peckius,1,1,1,3
-Polygonia comma,1,1,1,3
-Polygonia interrogationis,1,1,1,3
-Speyeria cybele,1,1,1,3
-Vanessa atalanta,1,1,1,3
-Vanessa cardui,1,1,1,3
-Vanessa virginiensis,1,1,1,3
-Atalopedes campestris,1,1,1,3
-Eurytides marcellus,1,1,1,3
-Poanes zabulon,1,1,1,3
-Cercyonis pegala,x,1,1,2
-Megisto cymela,x,1,1,2
-Papilio cresphontes,1,x,1,2
-Polites themistocles,x,1,1,2
-Nastra lherminier,x,1,1,2
-Pyrgus communis,x,1,1,2
-Battus philenor,1,x,x,1
-Chlosyne nycteis,1,x,x,1
-Poanes hobomok,x,x,1,1
-Satyrium calanus,x,x,1,1
-Celastrina neglecta,1,x,x,1
-Hylephila phyleus,1,x,x,1
-Strymon melinus,1,x,x,1
+scientificName,sciname
+Ancyloxypha numitor,A. numitor
+Asterocampa celtis,A. celtis
+Atalopedes campestris,A. campestris
+Battus philenor,B. philenor
+Cercyonis pegala,C. pegala
+Chlosyne nycteis,C. nycteis
+Colias eurytheme,C. eurytheme
+Colias philodice,C. philodice
+Danaus plexippus,D. plexippus
+Epargyreus clarus,E. clarus
+Erynnis baptisiae,E. baptisiae
+Euptoieta claudia,E. claudia
+Eurytides marcellus,E. marcellus
+Everes comyntas,E. comyntas
+Junonia coenia,J. coenia
+Lerema accius,L. accius
+Limenitis archippus,L. archippus
+Limenitis arthemis astyanax,L. arthemis astyanax
+Megisto cymela,M. cymela
+Nastra lherminier,N. lherminier
+Nymphalis antiopa,N. antiopa
+Papilio cresphontes,P. cresphontes
+Papilio glaucus,P. glaucus
+Papilio polyxenes,P. polyxenes
+Papilio troilus,P. troilus
+Phyciodes tharos,P. tharos
+Pieris rapae,P. rapae
+Poanes hobomok,P. hobomok
+Poanes zabulon,P. zabulon
+Polites peckius,P. peckius
+Polites themistocles,P. themistocles
+Polygonia comma,P. comma
+Polygonia interrogationis,P. interrogationis
+Pyrgus communis,P. communis
+Satyrium calanus,S. calanus
+Satyrium titus,
+Speyeria cybele,S. cybele
+Vanessa atalanta,V. atalanta
+Vanessa cardui,V. cardui
+Vanessa virginiensis,V. virginiensis
