@@ -87,7 +87,7 @@ gdd<-gdd %>%
 #10% phenometric dataset (emergence) 
 #combine metrics from surveys and incidental data in one dataframe
 pheno10<-merge(pollard10, inat10, by=intersect(names(inat10), names(pollard10))) 
-
+write.csv(pheno10, file="data/emergence_metrics.csv")
 #add gdd (by year-grid cell) to dataframe
 pheno10<-merge(pheno10, gdd, by=intersect(names(pheno10), names(gdd)))
 #add traits (by species) to dataframe
@@ -110,10 +110,57 @@ pheno50<-merge(pheno50, gdd, by=intersect(names(pheno50), names(gdd)))
 #add traits (by species) to dataframe
 pheno50<-merge(pheno50,traits, by.x="scientificName", by.y="scientificName")
 
-survey10<-pheno10 %>% dplyr::select(scientificName,p.est,log.gdd:confus)
-survey50<-pheno50 %>% dplyr::select(scientificName,p.est,log.gdd:confus)
-incid10<-pheno10 %>% dplyr::select(scientificName,i.est,log.gdd:confus)
-incid50<-pheno50 %>% dplyr::select(scientificName,i.est,log.gdd:confus)
+rm(gdd, inat10, inat50, p.mat, pollard10, pollard50, traits)
+survey10<-pheno10 %>% dplyr::select(scientificName,p.est,log.gdd:confus) %>% mutate(wing.mean=wing.mean/10, wing.max=wing.max/10)
+survey50<-pheno50 %>% dplyr::select(scientificName,p.est,log.gdd:confus) %>% mutate(wing.mean=wing.mean/10, wing.max=wing.max/10)
+incid10<-pheno10 %>% dplyr::select(scientificName,i.est,log.gdd:confus) %>% mutate(wing.mean=wing.mean/10, wing.max=wing.max/10)
+incid50<-pheno50 %>% dplyr::select(scientificName,i.est,log.gdd:confus) %>% mutate(wing.mean=wing.mean/10, wing.max=wing.max/10)
+(rm(pheno10, pheno50))
+datasets<-list(incid10, survey10, incid50, survey50)
 
-datasets<-list(pheno10, pheno50)
-datasets2<-list(survey10, survey50, incid10, incid50)
+save(datasets, file="data/input_for_models.RData")
+
+#Day 0 comparison
+
+day0.locs<-read_csv("data/day0regions.csv")
+day0<-read_csv("data/day0values.csv") %>%
+  pivot_longer(`DC`:`IA`, names_to = "region", values_to="doy0") %>%
+  rename(scientificName=Species)
+day0$scientificName[day0$scientificName=="Cupido comyntas"]<-"Everes conymtas"
+
+
+
+
+day0.emerg<-read_csv("data/emergence_indices.csv") %>% 
+  dplyr::select(scientificName:ihigh, ows) %>%  mutate(region=NA) 
+day0.emerg$scientificName[day0.emerg$scientificName=="Cupido comyntas"]<-"Everes conymtas"
+
+for(i in 1:nrow(day0.locs)) {
+  day0.emerg$region[day0.emerg$lat_bin==day0.locs$lat_bin[i] & day0.emerg$lon_bin== day0.locs$lon_bin[i]]<-day0.locs$region[i]
+}
+#table(pheno10$region)
+
+day0pheno<-merge(day0.emerg, day0, by=c("region","scientificName"), all.x=T) %>%
+  mutate(incidental=i.est-doy0, survey=p.est-doy0) %>%
+  dplyr::select(scientificName,year, lat_bin, lon_bin, region, incidental, survey) %>%
+  pivot_longer(incidental:survey, names_to="datasource", values_to="emerg.lag")
+
+rm(day0, day0.locs)
+#How many are <0?
+#Incidental
+inc0<-round(nrow(filter(day0pheno, emerg.lag<0,datasource=="incidental"))/nrow(filter(day0pheno, datasource=="incidental")),3)
+surv0<-round(nrow(filter(day0pheno, emerg.lag<0,datasource=="survey"))/nrow(filter(day0pheno, datasource=="survey")),3)
+
+#Test if incidental metrics are consistently earlier for any species
+
+
+(day0.bias<-day0.emerg %>% mutate(surveylag=p.est-i.est, lagsign=sign(surveylag)) %>%
+  group_by(scientificName) %>% 
+  summarize(howmuch=sum(surveylag)/length(surveylag),nearly=sum(lagsign), bias=sum(lagsign)/length(surveylag), nmetrics=length(surveylag))  %>%
+  filter(bias>0.5 | bias< (-0.5), nmetrics>1) )
+  
+
+et<-as.data.frame(summary(lm(emerg.lag~datasource*scientificName, data=day0pheno))$coefficients)
+filter(et, `Pr(>|t|)`<0.06)
+
+rm(day0.emerg, day0.bias, et, inc0, surv0)
