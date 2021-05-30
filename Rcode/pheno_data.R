@@ -25,12 +25,12 @@ library(MuMIn)     #MuMIn to calculate r2 for mixed models
 
 ## DATA
 #load 10% incidental phenometrics, select fields, add width of confidence int.
-inat10<-read_csv("Emperical_Results/naive_tenth_inat_estimates.csv") %>% 
+inat10<-read_csv("data/naive_tenth_inat_estimates.csv") %>% 
   rename(i.est=estimate, ilow=low_ci, ihigh=high_ci, i.npresence=obs) %>%
   mutate(i.ci=ihigh-ilow, metric=10)
 
 #load 50% incidental phenometrics, select fields, add width of confidence int.
-inat50<-read_csv("Emperical_Results/naive_fiftieth_iNat_estimates.csv") %>% 
+inat50<-read_csv("data/naive_fiftieth_iNat_estimates.csv") %>% 
   rename(i.est=estimate, ilow=low_ci, ihigh=high_ci, i.npresence=obs) %>%
   mutate(i.ci=ihigh-ilow, metric=50)
 
