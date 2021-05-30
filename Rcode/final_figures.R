@@ -215,7 +215,7 @@ day0pheno<-merge(day0pheno, splist[,c(1:2)], by="scientificName")
 (day0plot<-ggplot(data=day0pheno, aes(x=scientificName, y=emerg.lag, fill=datasource)) + 
   geom_boxplot() + theme_light() + geom_hline(yintercept=7) + 
   labs(title="", x="Species", y="# days (estimate - day0)") + 
-  scale_fill_manual(name="Data source:", labels=c("Incidental","Survey"), values=c("palegreen","dodgerblue3"),guide = guide_legend(reverse = TRUE)) + 
+  scale_fill_manual(name="Data source:", labels=c("Incidental","Survey"), values=c("palegreen","dodgerblue3"),guide = guide_legend(reverse = FALSE)) + 
   theme(legend.position='top', axis.text.x = element_text(size=8,face="italic",angle = 75, vjust = 1, hjust=1)) + 
   scale_x_discrete(labels=sort(unique(day0pheno$sciname))) )
 
@@ -260,6 +260,51 @@ figure4 <- grid.arrange(fig4a, fig4b, leg4,  ncol = 3, nrow = 1, widths=c(3,3,1)
 figure4
 ggsave("figs/Larsen_etal_Fig4.png", plot=figure4, width = 6, height = 2.5, dpi = 300, units = "in", device='png')
 
+
+
+###########################################
+## FIGURE 5: Model predictions
+#### PLOTS FOR MODEL FIT BY SPECIES WITH OVERWINTER COLOR
+
+library(merTools)
+load("Rcode/finalmodels.RData")
+
+datasets<-list(incid10, survey10, incid50, survey50)
+finalmodels<-list(best.i10, best.s10, best.i50, best.s50)
+titles<-c("10% metrics from incidental data","10% metrics from survey data",
+          "50% metrics from incidental data", "50% metrics from survey data")
+fig5panels<-list()
+for(i in 1:4) {
+  if(i %in% c(1,3)) {
+    datasets[[i]]<-datasets[[i]] %>% rename(est=i.est)
+    } else {
+      datasets[[i]]<-datasets[[i]] %>% rename(est=p.est)
+    }
+  fm1 <- lm(formula=est~log.gdd+ows, data=datasets[[i]])
+  df3 = cbind(datasets[[i]], predict(fm1,interval = "confidence"))
+   
+  fig5panels[[i]]<- ggplot(data=df3, mapping=aes(x=exp(log.gdd), y=est, color=ows)) +  
+    geom_ribbon(data=df3, aes(x=exp(log.gdd), ymin=lwr, ymax=upr, group=ows), color="gray", size=0, fill="gray", alpha=0.6) + 
+    geom_line(mapping=aes(y=fit, color=ows), size=1.5) +
+    scale_x_continuous(name='GDD (Jan-Jun)', trans="identity", labels=waiver()) + 
+    theme_classic()+labs(y="DOY prediction", title=titles[i]) + theme(legend.position = "none")
+  
+}
+#combine plots
+
+# Extract the legend. Returns a gtable
+forlegend<-ggplot(data=df3, mapping=aes(x=exp(log.gdd), y=est, color=ows)) +  
+  geom_ribbon(data=df3, aes(x=exp(log.gdd), ymin=lwr, ymax=upr, group=ows), color="gray", size=0, fill="gray", alpha=0.6) + 
+  geom_line(mapping=aes(y=fit, color=ows), size=2) +
+  scale_x_continuous(name='GDD (Jan-Jun)', trans="identity", labels=waiver()) + 
+  theme_classic()+labs(y="DOY prediction", title=titles[i]) + theme(legend.position = "bottom")
+
+leg5 <- as_ggplot(get_legend(forlegend))
+
+fig5<-grid.arrange(fig5panels[[1]],fig5panels[[2]],fig5panels[[3]],fig5panels[[4]],leg5, nrow=3, heights=c(4,4,1))
+ 
+
+ggsave("figs/Larsen_etal_Figure5.png",fig5,width = 10, height = 9, dpi = 300, units = "in")
 
 
 

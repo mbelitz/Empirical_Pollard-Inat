@@ -110,10 +110,12 @@ pheno50<-merge(pheno50, gdd, by=intersect(names(pheno50), names(gdd)))
 #add traits (by species) to dataframe
 pheno50<-merge(pheno50,traits, by.x="scientificName", by.y="scientificName")
 
-survey10<-pheno10 %>% dplyr::select(scientificName,p.est,log.gdd:confus)
-survey50<-pheno50 %>% dplyr::select(scientificName,p.est,log.gdd:confus)
-incid10<-pheno10 %>% dplyr::select(scientificName,i.est,log.gdd:confus)
-incid50<-pheno50 %>% dplyr::select(scientificName,i.est,log.gdd:confus)
+rm(gdd, inat10, inat50, p.mat, pollard10, pollard50, traits)
+survey10<-pheno10 %>% dplyr::select(scientificName,p.est,log.gdd:confus) %>% mutate(wing.mean=wing.mean/10, wing.max=wing.max/10)
+survey50<-pheno50 %>% dplyr::select(scientificName,p.est,log.gdd:confus) %>% mutate(wing.mean=wing.mean/10, wing.max=wing.max/10)
+incid10<-pheno10 %>% dplyr::select(scientificName,i.est,log.gdd:confus) %>% mutate(wing.mean=wing.mean/10, wing.max=wing.max/10)
+incid50<-pheno50 %>% dplyr::select(scientificName,i.est,log.gdd:confus) %>% mutate(wing.mean=wing.mean/10, wing.max=wing.max/10)
+(rm(pheno10, pheno50))
+datasets<-list(incid10, survey10, incid50, survey50)
 
-datasets<-list(pheno10, pheno50)
-datasets2<-list(survey10, survey50, incid10, incid50)
+save(datasets, file="data/input_for_models.RData")
