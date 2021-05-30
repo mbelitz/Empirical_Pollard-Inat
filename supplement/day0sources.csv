@@ -1,34 +1,31 @@
-scientific_name,In Comparative Model,Mobility_code,wing.max,wing.mean,canopy.open,canopy.mixed,canopy.closed,local.abundance.description,abundance.common,migrant,host.breadth.index,host.breadth.description,voltinism,Voltinism.description,overwinter.stage,egg.clusters,Oviposition,detectability.index,Detectability,confusability.index,Confusability
-Ancyloxypha numitor,1,1,28,23,1,0,0,Common,1,0,2,One family - many species,3,Multivoltine,larva,0,Singly,2,low-med (Medium),Low,1
-Asterocampa celtis,1,1,66,53,0,1,0,Common,1,0,1,"One genus, multiple species",3,Multivoltine,larva,1,Clusters,1,Low,Medium - Easily confused with Tawny emperor where they overlap,2
-Atalopedes campestris,1,4,41,34.5,1,1,0,Common,1,1,2,One family - many species,3,Multivoltine,migrant,0,Singly,2,Medium,Medium,2
-Cercyonis pegala,1,1,76,62,1,1,0,Common,1,0,2,One family - many species,1,Univoltine,larva,0,Singly,3,High,Low,1
-Colias eurytheme,1,4,68,53.5,1,1,0,Common,1,0,2,One family - many species,3,Multivoltine,larva,0,Singly,3,High,Orange usually easy to see in summer but people often confuse with C. philodice,3
-Colias philodice,1,4,70,56,1,0,0,Common,1,0,2,One family - many species,3,Multivoltine,larva,0,Singly,3,High,Never orange but pale yellow form of C. eurythem easy to confuse,3
-Cupido comyntas,1,1,29,23.5,1,1,0,Common,1,0,2,One family - many species,3,Multivoltine,larva,0,Singly,2,Medium,Low,1
-Danaus plexippus,1,5,114,95,1,1,0,Common,1,1,2,One family - many species,3,Multivoltine,migrant,0,Singly,3,High,Low,1
-Epargyreus clarus,1,2,61,51,1,1,0,Common,1,0,2,One family - many species,3,Multivoltine,pupa,0,Singly,3,High,Low,1
-Erynnis baptisiae,1,1,45,39,1,1,0,Common,1,0,2,One family - many species,2,Mostly two,larva,0,Singly,1,Low,High lots of very similar Erynnis out there!,4
-Euptoieta claudia,1,4,80,58,1,0,0,Uncommon,0,1,3,Multiple families,3,Multivoltine,migrant,0,Singly,3,High,Low ,1
-Eurytides marcellus,1,4,102,78,1,1,1,Common,1,0,1,One genus,3,Multivoltine,pupa,0,Singly,3,High,Low,1
-Junonia coenia,1,5,69,52.5,1,1,0,Common,1,1,3,Multiple families,3,Multivoltine,migrant,0,Singly,2,Medium,Low,1
-Limenitis archippus,1,2,76,67,1,1,1,Common,1,0,2,One family - many species,3,Multivoltine,larva,0,Singly,3,High,"Medium, can be mistaken for monarch, but is generally distinguishable",2
-Limenitis arthemis astyanax,1,4,92,79,0,1,1,Uncommon,0,0,3,Multiple families,3,Multivoltine,larva,0,Singly,3,High,Low,1
-Megisto cymela,1,1,48,40.5,0,1,1,Common,1,1,1,One family - few species,3,Univoltine,larva,0,Singly,3,High,Low,1
-Nastra lherminier,1,1,28,25.5,1,0,0,Uncommon,0,0,1,One species? (One family - few species),3,Multivoltine,larva,0,Singly,1,Low,High,4
-Nymphalis antiopa,1,5,102,89,0,1,1,Uncommon,0,1,3,Multiple families,3,Multivoltine,adult,1,Clusters,2,Medium,Low,1
-Papilio glaucus,1,2,165,127,1,1,1,Common,1,0,3,Multiple families,3,Multivoltine,pupa,0,Singly,4,Highest,Low,1
-Papilio polyxenes,1,2,113,88.5,1,1,0,Common,1,0,2,One family - many species,3,Multivoltine,pupa,0,Singly,3,High,"Medium, one of several species that mimic pipevine, but it can usually be distinguished",3
-Papilio troilus,1,4,130,104,0,1,1,Uncommon,0,0,1,One family few species (Multiple families - few species),3,Multivoltine,pupa,0,Singly,3,High,"Medium, one of several species that mimic pipevine, but it can usually be distinguished",3
-Phyciodes tharos,1,1,41,27.5,1,1,0,Common,1,0,1,One family - few species,3,Multivoltine,larva,1,Clusters,2,Medium,"Low, several similar species but this is the most common and can usually be distinguished",2
-Pieris rapae,1,4,50,44,1,0,0,Common,1,0,2,One family - many species,3,Multivoltine,pupa,0,Singly,3,High,"Low, several similar species, but in most of this range, they are by far the most common med-sized white, clear field marks",2
-Poanes zabulon,1,2,39,32.5,0,1,1,Common,1,1,1,One family - few species,3,Multivoltine,larva,0,Singly,1,Low,"Medium, several similar species, but can be distinguished with good look",3
-Polites peckius,1,2,31,30.5,1,0,0,Common,1,0,1,One family - few species,2,Bivoltine,larva and pupa?,0,Singly,2,Medium,Medium,2
-Polites themistocles,1,2,36,28,1,0,0,Common,1,0,1,One fam many sp? (Few species),3,Multivoltine,pupa,0,Singly,1,Low,"Medium, several similar species, but can be distinguished with good look",3
-Polygonia comma,1,2,54,49.5,0,1,1,Common,1,0,2,Multiple families (few species),3,Multivoltine,adult,1,Singly or clusters,2,Medium,"Medium, hard to distinguish from P. interrogationnis without a good look",3
-Polygonia interrogationis,1,4,76,62,0,1,1,Common,1,0,2,Multiple families (few species),3,Multivoltine,adult,1,Singly or clusters,2,Medium,"Medium, hard to distinguish from P. comma without a good look",3
-Pyrgus communis,1,2,32,26,1,1,0,Uncommon,0,0,2,One family - many species,3,Multivoltine,larva,0,Singly,2,Medium,Low,1
-Speyeria cybele,1,3,100,85.5,1,1,0,Common,1,0,1,One genus - few species,1,Univoltine,larva,0,Singly,3,High,Low,1
-Vanessa atalanta,1,5,70,60,1,1,0,Common,1,0,1,One family - one genus (few species),3,Multivoltine,adult,0,Singly,2,Medium,Low,1
-Vanessa cardui,1,5,75,60,1,0,0,Common,1,1,3,Multiple families,3,Multivoltine,migrant,0,Singly,2,Medium,"Medium, can be mistaken for V. virginiensis",3
-Vanessa virginiensis,1,4,67,55.5,1,1,0,Common,1,0,3,Multiple families,3,Multivoltine,adult,0,Singly,2,Medium,"Medium, can be mistaken for V. cardui",3
+BookID,Source Author,Source Date,Source Title,Comments
+76,Glassberg,1993,Bfly through Binoculars: Boston-NY-Washington Region,Great information about first flight dates for New York locations
+180,Blackney,2015,Northern Virginia Butterflies and Skippers: A Field Guide,"Has flight dates, but no indication of first flight dates"
+179,Clark,1932,The Butterflies of the District of Columbia and Vicinity,"Awesome descriptions of phenology throughout the season, including phenology in the DC area and Boston area (Boston notes from Scudder)"
+54,Allen,1997,The Butterflies Of West Virginia and their Caterpillars,Not a lot of phenology info (and we don't have data from W. Virginia)
+409,Shapiro,1974,Butterflies and skippers of New York State,"First emergence dates in a table for Ithaca NY, but from records for four years - dates are all over the place.   General seasonality given by locality in summaries with range for first flight dates."
+58,Belth,2013,Butterflies of Indiana: a field guide,phenograms that show build up of butterflies and are broken down by quarter-month.  I interpreted first indication of appearance to be earliest general appearance (although it doesn't say in book) by quarter-month
+81,Jeffords,2014, Butterflies of Illinois: A Field Guide,"Skippers not covered. They have a phenogram that shows progressive light grey to black to indicate peak abundance, but they also have notes in the species descriptions, so I follow those when they are specific.  Otherwise, since the gradation is continuous, so I will interpret the beginning as the earliest date - and visually separate into closest day (1st, 7th, 15th, 21st)"
+61,Bouseman,2006,Field Guide to the Skipper Butterflies of Illinois,"Sporadic and general phenology info.  When given, I used beginning of flight time as ""general start"""
+62,Bouseman,2001,Field Guide to Butterflies of Illinois,Sporadic and general phenology info.  I didn't use this source since it seemed unlikely to add more info than in book 81
+104,Weber,2002,Butterflies of the North Woods (North Woods Naturalist Guides),"Doesn't give range of first flight, but substantially north of other guides (wooded areas of Michigan, WI and MN into Canada).  Bar for phenology is continuous, so I did my best to estimate day (by 1st, 7th, 14th, 21st) for the general emergence date"
+70,Douglas,2005,Butterflies of the Great Lakes Region,"Skippers not included. Phenology info coarse.  Divided into three zones: Carolinean (south of N. Woods); Canadian (northern 1/2 of ""North Woods""; mostly Canada and the northern zone of MN and WI); Transition (southern 1/2 of ""North Woods""; area most of MN, WI, MI open areas)"
+59,Betros,2008,A Photographic Field Guide to the Butterflies in the Kansas City Region,"Basically covers the eastern 1/3 of KS and western 1/3 of MO (with Kansas City in the middle).  Bar for phenology is continuous, so I did my best to estimate day (by 1st, 7th, 14th, 21st) for the general emergence date.  It doesn't specify what part of state the phenology refers to"
+70,Schlict,2007,The butterflies of Iowa,"He summarizes emerge in description (I use for general emergence) but also shows flight diagrams (I didn't use these since only based on verified records, usually within range of what was described, but sometimes later - perhaps he relied on his observations in the field as well?)"
+413,Iftner,1992,Butterflies and skippers of Ohio,Phenograms that show abundance across time (but not by region)
+416,Gilligan,1992," The butterflies and skippers of Hancock County, Ohio",No useful info
+73,Glassberg,1999,Butterflies through Binoculars: The East- A Field Guide to the Butterflies of Eastern North America,"Phenograms (in WI, NY, NC, LA) and range maps for all eastern butterflies!!"
+Books I don't have that indicate they include phenology data (could ask Rob for some),,,,
+,,,, 
+,,,,McGuire QL551 .O5 G55
+,,,,
+,,,,
+Grid translations,,,,
+Main data grids,,,,
+DC,"38.5N, 77.5W",,Looked at mid-point Glassberg (NY-NC) and also Kansas City,
+NE OH,"41.5N, 81.5W",,"Looked at Ifner (OH), IN, and Glassberg (NY)",
+SW OH,"39.5N, 84.5W",,"Looked at Ifner (OH), IN, and Glassberg (NY)",
+Chicago,"41.5N, 87.5W",,Looked at IN/OH,
+NE IL,"41.5N, 88.5W",,Looked at IN/OH,
+SW IL,"38.5N, 90.5W",,Used Kansas City/IL,
+SC IA,"41.5N, 93.5W",,IA/WI,
