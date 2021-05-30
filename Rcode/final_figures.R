@@ -305,6 +305,3 @@ fig5<-grid.arrange(fig5panels[[1]],fig5panels[[2]],fig5panels[[3]],fig5panels[[4
  
 
 ggsave("figs/Larsen_etal_Figure5.png",fig5,width = 8, height = 8, dpi = 300, units = "in")
-
-
-
