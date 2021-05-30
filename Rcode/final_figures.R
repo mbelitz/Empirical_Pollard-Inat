@@ -24,7 +24,7 @@ splist<-read_csv("data/species_list.csv")
 
 #### FIGURE 1
 #Load & summarize incidental data
-incid<-read_csv("Emperical_Results/obs10_by-cell-spp-year.csv") %>%
+incid<-read_csv("data/obs10_by-cell-spp-year.csv") %>%
   filter( between(lat_bin,36,42), between( lon_bin, -94, -76 )) %>%
   filter(scientificName %in% splist$scientificName, between(year, 2012,2018)) %>%
   group_by(lat_bin, lon_bin, scientificName) %>%
@@ -158,9 +158,9 @@ FIG2survey
 incid_sample<-read_csv("data/incid_speyeria.csv") 
 
 
-incid10<-read_csv("Emperical_Results/naive_tenth_iNat_estimates.csv") %>%
+incid10<-read_csv("data/naive_tenth_iNat_estimates.csv") %>%
   filter(lat_bin==lat.f2,lon_bin==lon.f2, year==year.f2, scientificName==sp.f2)
-incid50<-read_csv("Emperical_Results/naive_fiftieth_iNat_estimates.csv") %>%
+incid50<-read_csv("data/naive_fiftieth_iNat_estimates.csv") %>%
   filter(lat_bin==lat.f2,lon_bin==lon.f2, year==year.f2, scientificName==sp.f2)
 
 incid.hist<-hist(incid_sample$day, breaks=c(10:30)*10)
@@ -299,9 +299,9 @@ forlegend<-ggplot(data=df3, mapping=aes(x=exp(log.gdd), y=est, color=ows)) +
   scale_x_continuous(name='GDD (Jan-Jun)', trans="identity", labels=waiver()) + 
   theme_classic()+labs(y="DOY prediction", title=titles[i]) + theme(legend.position = "bottom")
 
-leg5 <- as_ggplot(get_legend(forlegend))
+leg5 <- ggpubr::as_ggplot(ggpubr::get_legend(forlegend))
 
-fig5<-grid.arrange(fig5panels[[1]],fig5panels[[2]],fig5panels[[3]],fig5panels[[4]],leg5, nrow=3, heights=c(4,4,1))
+fig5<-gbm::grid.arrange(fig5panels[[1]],fig5panels[[2]],fig5panels[[3]],fig5panels[[4]],leg5, nrow=3, heights=c(4,4,1))
  
 
 ggsave("figs/Larsen_etal_Figure5.png",fig5,width = 8, height = 8, dpi = 300, units = "in")
