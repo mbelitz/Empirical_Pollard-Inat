@@ -20,10 +20,12 @@ survey50<-survey50 %>% dplyr::select(!wing.mean)
 library(lmerTest)
 
 ## SURVEY 10%
-# Fit fixed effect model
+# Full model formula: interaction of log.gdd and ows (overwinter stage); then all other parameters
+#log.gdd is column 3; ows is column 12
 formula.surv<-paste("p.est ~ -1 + log.gdd*ows",sep="")
 for(i in c(4:11,13:15)) {formula.surv<-paste(formula.surv," + ",names(survey10)[i], sep="")}
 formula.surv<-formula(formula.surv)
+#run full mixed effects model
 full.lm <- lm(formula.surv, data = survey10)
 step.lm <- stepAIC(full.lm, direction = "both",  trace = FALSE)
 (vars<-row.names(summary(step.lm)$coefficients))

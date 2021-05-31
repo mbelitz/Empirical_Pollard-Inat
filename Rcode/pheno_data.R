@@ -16,12 +16,6 @@ library(corrplot)  #corrplot to check correlations among explanatory variables
 library(lme4)      #lme4 to run mixed effects models
 library(MuMIn)     #MuMIn to calculate r2 for mixed models
 
-#library(ggplot2)
-
-#library(ggeffects)
-#library(leaps)
-#library(gridExtra)
-
 
 ## DATA
 #load 10% incidental phenometrics, select fields, add width of confidence int.
@@ -52,7 +46,7 @@ pollard50<-pollardM %>%
 
 #remove raw survey metrics table
 rm(pollardM)
-
+save(inat10, inat50, survey10, survey50, file="data/all_phenometrics.RData")
 #load species traits
 #species traits from excel, filter to species with clear overwinter stage, set factors
 #wing.mean, wing.max, canopy.open, canopy.mixed, canopy.closed, host.breadth.index, voltinism, egg.clusters,
@@ -115,10 +109,11 @@ survey10<-pheno10 %>% dplyr::select(scientificName,p.est,log.gdd:confus) %>% mut
 survey50<-pheno50 %>% dplyr::select(scientificName,p.est,log.gdd:confus) %>% mutate(wing.mean=wing.mean/10, wing.max=wing.max/10)
 incid10<-pheno10 %>% dplyr::select(scientificName,i.est,log.gdd:confus) %>% mutate(wing.mean=wing.mean/10, wing.max=wing.max/10)
 incid50<-pheno50 %>% dplyr::select(scientificName,i.est,log.gdd:confus) %>% mutate(wing.mean=wing.mean/10, wing.max=wing.max/10)
-(rm(pheno10, pheno50))
 datasets<-list(incid10, survey10, incid50, survey50)
 
+save(pheno10, pheno50, file="data/combined_phenometrics.RData")
 save(datasets, file="data/input_for_models.RData")
+(rm(pheno10, pheno50))
 
 #Day 0 comparison
 
