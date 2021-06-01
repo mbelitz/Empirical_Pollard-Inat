@@ -137,7 +137,7 @@ surv.speyeria<-surv.speyeria %>%
   mutate(dailyprob=est*1000) %>%
   arrange(yday)
 
-for(i in c(2:365)) {surv.speyeria$dailyprob[i]<-(surv.speyeria$est[i]-surv.speyeria$est[i-1])*10000}
+for(i in c(2:365)) {surv.speyeria$dailyprob[i]<-(surv.speyeria$est[i]-surv.speyeria$est[i-1])*6000}
 
 (FIG2survey<-ggplot(data=filter(surv.speyeria,yday<361), aes(x=yday,y=dailyprob)) +
     geom_rect(aes(xmin=tenth.ci[1],xmax=tenth.ci[2], ymin=-Inf, ymax=Inf), fill="gold1", alpha=0.25) +
@@ -147,11 +147,11 @@ for(i in c(2:365)) {surv.speyeria$dailyprob[i]<-(surv.speyeria$est[i]-surv.speye
     #  geom_vline(xintercept=round(tenth.ci$percent[5]),color="black", linetype=2) +
     geom_vline(xintercept=boot.out$t0[366], linetype=3) +
     geom_vline(xintercept=boot.out$t0[367], linetype=2) +
-    xlim(100,320) + theme(axis.text.y = element_blank()) +
+    xlim(100,320) + theme_classic() + theme(axis.text.y = element_blank()) +
     geom_histogram(data=survey_samp, aes(x=yday, fill = as.factor(npres)), colour="black", binwidth=7,  inherit.aes=F) + #xlim(190, 230) +
     scale_fill_manual(values=c("white","black"), guide=F) +
     labs(x="Day of year", y="Relative abundance") +
-    theme_classic()  +labs(tag="A")  )
+    labs(tag="A")  )
 FIG2survey
 
 #Incidental data
@@ -267,25 +267,28 @@ ggsave("figs/Larsen_etal_Fig4.png", plot=figure4, width = 6, height = 2.5, dpi =
 #### PLOTS FOR MODEL FIT BY SPECIES WITH OVERWINTER COLOR
 
 library(merTools)
-load("Rcode/finalmodels.RData")
+#load pheno data
+load("data/combined_phenometrics.RData")
 
-datasets<-list(incid10, survey10, incid50, survey50)
+#load paramterized models
+datasets<-list(pheno10, pheno10, pheno50, pheno50)
 finalmodels<-list(best.i10, best.s10, best.i50, best.s50)
-titles<-c("10% metrics from incidental data","10% metrics from survey data",
-          "50% metrics from incidental data", "50% metrics from survey data")
+titles<-c("B. 10% metrics from incidental data","A. 10% metrics from survey data",
+          "D. 50% metrics from incidental data", "C. 50% metrics from survey data")
 fig5panels<-list()
 for(i in 1:4) {
   if(i %in% c(1,3)) {
-    datasets[[i]]<-datasets[[i]] %>% rename(est=i.est)
+    data.i<-datasets[[i]] %>% rename(est=i.est)
     } else {
-      datasets[[i]]<-datasets[[i]] %>% rename(est=p.est)
+      data.i[[i]]<-datasets[[i]] %>% rename(est=p.est)
     }
-  fm1 <- lm(formula=est~log.gdd+ows, data=datasets[[i]])
-  df3 = cbind(datasets[[i]], predict(fm1,interval = "confidence"))
+  fm1 <- lm(formula=est~log.gdd+ows, data=data.i)
+  df3 = cbind(data.i, predict(fm1,interval = "confidence"))
    
   fig5panels[[i]]<- ggplot(data=df3, mapping=aes(x=exp(log.gdd), y=est, color=ows)) +  
     geom_ribbon(data=df3, aes(x=exp(log.gdd), ymin=lwr, ymax=upr, group=ows), color="gray", size=0, fill="gray", alpha=0.6) + 
-    geom_line(mapping=aes(y=fit, color=ows), size=1.5) +
+    geom_line(mapping=aes(y=fit, color=ows), size=1.5) + 
+    scale_color_viridis(discrete=TRUE) + 
     scale_x_continuous(name='GDD (Jan-Jun)', trans="identity", labels=waiver()) + 
     theme_classic()+labs(y="DOY prediction", title=titles[i]) + theme(legend.position = "none")
   
@@ -296,12 +299,14 @@ for(i in 1:4) {
 forlegend<-ggplot(data=df3, mapping=aes(x=exp(log.gdd), y=est, color=ows)) +  
   geom_ribbon(data=df3, aes(x=exp(log.gdd), ymin=lwr, ymax=upr, group=ows), color="gray", size=0, fill="gray", alpha=0.6) + 
   geom_line(mapping=aes(y=fit, color=ows), size=2) +
+  scale_color_viridis(discrete=TRUE) + labs(color="Overwinter stage:") +
   scale_x_continuous(name='GDD (Jan-Jun)', trans="identity", labels=waiver()) + 
-  theme_classic()+labs(y="DOY prediction", title=titles[i]) + theme(legend.position = "bottom")
+  theme_classic()+labs(y="DOY prediction", title=titles[i], legend="Overwinter stage:") + 
+  theme(legend.position = "bottom", legend.text=element_text(size=13), legend.title=element_text(size=13))
 
 leg5 <- ggpubr::as_ggplot(ggpubr::get_legend(forlegend))
 
-fig5<-gbm::grid.arrange(fig5panels[[1]],fig5panels[[2]],fig5panels[[3]],fig5panels[[4]],leg5, nrow=3, heights=c(4,4,1))
+(fig5<-grid.arrange(fig5panels[[2]],fig5panels[[1]],fig5panels[[4]],fig5panels[[3]],leg5, nrow=3, layout_matrix = rbind(c(1,2),c(3,4),c(5,5)),heights=c(4,4,1)))
  
 
 ggsave("figs/Larsen_etal_Figure5.png",fig5,width = 8, height = 8, dpi = 300, units = "in")
