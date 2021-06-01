@@ -42,7 +42,6 @@ s10.conf<-get_model(step(s10.conf.lmer))
 s10.conf.lmer<-lmer(p.ci~p.nsites+p.nsurveys+p.npresence+wing.max+confus+(1|scientificName), data=pheno10)
 s10.conf<-get_model(step(s10.conf.lmer))
 summary(s10.conf)
-summary(s10.conf)
 r.squaredGLMM(s10.conf)
 
 #summary and analysis of 50% confidence intervals

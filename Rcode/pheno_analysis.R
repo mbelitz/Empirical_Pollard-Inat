@@ -37,15 +37,13 @@ extractAIC(f1fin)
 r.squaredGLMM(f1fin)
 ranova(f1fin)
 #log.gdd slope in random effect does not improve model
+##boundary fit:full.model2<-lmer(p.est~ -1 + log.gdd*ows + local.abund + (1|detect) + (1|scientificName), data= survey10)
 full.model2<-lmer(p.est~ -1 + log.gdd*ows + local.abund + (1|confus/scientificName), data= survey10)
-full.model2<-lmer(p.est~ -1 + log.gdd*ows + local.abund + (1|confus) + (1|scientificName), data= survey10)
+full.model2<-lmer(p.est~ -1 + log.gdd*ows + local.abund + (1|confus)  + (1|scientificName), data= survey10)
 f2fin<-get_model(step(full.model2))
 extractAIC(f2fin)
 r.squaredGLMM(f2fin)
 ranova(f2fin)
-#full.model3<-lmer(p.est~ -1 + log.gdd*ows  + local.abund + (1|confus), data= survey10)
-#f3fin<-get_model(step(full.model3))
-#r.squaredGLMM(f3fin)
 
 best.s10<-f2fin
 
@@ -69,8 +67,11 @@ ranova(f1fin)
 #log.gdd slope in random effect does not improve model
 
 #Failed to converge: model2<-lmer(i.est~ -1  + log.gdd*ows +  (1|detect/scientificName), data= incid10)
-#Is singular: model2<-lmer(i.est~ -1  + log.gdd*ows +  (1|detect) , data= incid10)
-model2<-lmer(i.est~ -1  + log.gdd*ows + (1|detect) + (1|scientificName) , data= incid10)
+#Boundary fit: model2<-lmer(i.est~ -1  + log.gdd*ows +  (1|detect) , data= incid10)
+#Boundary fit: model2<-lmer(i.est~ -1  + log.gdd*ows + (1|detect) + (1|scientificName) , data= incid10)
+#Boundary fit: model2<-lmer(i.est~ -1  + log.gdd*ows + (1|confus) + (1|scientificName) , data= incid10)
+model2<-lmer(i.est~ -1  + log.gdd*ows + (1|scientificName) , data= incid10)
+
 f2fin<-get_model(step(model2))
 extractAIC(f2fin)
 r.squaredGLMM(f2fin)
@@ -95,13 +96,16 @@ extractAIC(f1fin)
 r.squaredGLMM(f1fin)
 ranova(f1fin)
 #log.gdd slope in random effect does not improve model
-#full.model2<-lmer(p.est~ -1 + log.gdd*ows  + canopy.open + canopy.closed + local.abund + host.breadth.index + voltinism + egg.clusters + ( 1|confus), data= survey50)
-#confus random effect explains no variation
-model2<-lmer(p.est~ -1 + log.gdd*ows  + canopy.open + canopy.closed + local.abund + host.breadth.index + voltinism + egg.clusters +  ( 1|scientificName), data= survey50)
+#Boundary fit: full.model2<-lmer(p.est~ -1 + log.gdd*ows  + canopy.open + canopy.closed + local.abund + host.breadth.index + voltinism + egg.clusters + ( 1|confus), data= survey50)
+model2<-lmer(p.est~ -1 + log.gdd*ows  + canopy.open + canopy.closed + local.abund + host.breadth.index + voltinism + egg.clusters + ( 1|scientificName), data= survey50)
 f2fin<-get_model(step(model2))
 extractAIC(f2fin)
 r.squaredGLMM(f2fin)
 ranova(f2fin)
+model2<-lmer(p.est~ -1 + log.gdd + ows + local.abund + (1|confus) +  ( 1|scientificName), data= survey50)
+f2fin<-get_model(step(model2))
+extractAIC(f2fin)
+r.squaredGLMM(f2fin)
 
 best.s50<-f2fin
 rm(full.lm, step.lm, full.model, f1fin, full.model2, f2fin)
@@ -135,6 +139,7 @@ ranova(f2fin)
 f3fin<-lmer(i.est ~ -1 + ows + host.breadth.index + (1|scientificName), data= incid50)
 r.squaredGLMM(f3fin)
 ranova(f3fin)
+extractAIC(f3fin) #lower AIC
 
 best.i50<-f3fin
 
@@ -176,3 +181,4 @@ write.csv(table10, file="Larsen_etal_Table1.csv")
 write.csv(table50, file="Larsen_etal_Table5.csv")
 
 save(best.i10, best.s10, best.i50, best.s50, file="Rcode/finalmodels.RData" )
+

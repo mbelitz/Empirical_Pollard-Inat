@@ -15,7 +15,7 @@ library(gridExtra)
 library(grid)
 library(ggpubr)
 library(boot)
-
+library(viridis)
 #Google's Terms of Service: https://cloud.google.com/maps-platform/terms/.
 #Please cite ggmap if you use it! See citation("ggmap") for details.
 
@@ -74,7 +74,7 @@ survey.map<-p + geom_polygon(fill = "gray", color = "darkgray") +
   geom_point(data=filter(survey, nyears==2), aes(lon_bin,lat_bin, size=nyears, color=NSP), inherit.aes=F) +
   geom_point(data=filter(survey, nyears==1), aes(lon_bin,lat_bin, size=nyears, color=NSP), inherit.aes=F) + 
   ggtitle("Survey data density") + xlim(-95,-73) + ylim(35,44) + 
-  scale_color_gradient(name="N. Species", limits=c(0,40), low="deepskyblue", high="black") + 
+  scale_color_gradient(name="N. Species", limits=c(1,40), low="deepskyblue", high="black") + 
   theme(legend.position="bottom", panel.border = element_rect(colour = "black", fill=NA),
         axis.text = element_text(colour = 1, size = 11),
         legend.background = element_blank(), legend.margin=margin(c(5,5,5,5)),
@@ -163,7 +163,7 @@ incid10<-read_csv("data/naive_tenth_iNat_estimates.csv") %>%
 incid50<-read_csv("data/naive_fiftieth_iNat_estimates.csv") %>%
   filter(lat_bin==lat.f2,lon_bin==lon.f2, year==year.f2, scientificName==sp.f2)
 
-incid.hist<-hist(incid_sample$day, breaks=c(10:30)*10)
+incid.hist<-hist(incid_sample$day, breaks=c(10:50)*7)
 inat.h<-(incid.hist$breaks + ((max(incid.hist$breaks)-min(incid.hist$breaks))/(length(incid.hist$breaks)-1)/2))[c(1:length(incid.hist$counts))]
 inat.c<-incid.hist$counts/2500
 
@@ -176,7 +176,7 @@ FIG2incid<- ggplot() +
   geom_vline(xintercept = incid50[1,1][[1]], color = "black", linetype=2) +
   labs(x = "Day of year", y = "Data density") +
   theme_classic() + theme(axis.text.y = element_blank()) + 
-  geom_col(aes(x=inat.h, y=inat.c), color="black") + labs(tag="B")
+  geom_col(aes(x=(inat.h), y=inat.c), color="black") + labs(tag="B")
 
 FIG2incid
 
@@ -187,84 +187,10 @@ figure2
 ggsave("figs/Larsen_etal_Fig2.png", plot=figure2, width = 6, height = 2.5, dpi = 300, units = "in", device='png')
 
 
-###########################################
-##  FIGURE 3: Compare emergences to "day 0"
-
-day0.locs<-read_csv("data/day0regions.csv")
-day0<-read_csv("data/day0values.csv") %>%
-  pivot_longer(`DC`:`IA`, names_to = "region", values_to="doy0") %>%
-  rename(scientificName=Species)
-day0$scientificName[day0$scientificName=="Cupido comyntas"]<-"Everes conymtas"
-
-pheno10<-read_csv("data/emergence_indices.csv") %>% 
-  dplyr::select(scientificName:ihigh, ows) %>%  mutate(region=NA) 
-pheno10$scientificName[pheno10$scientificName=="Cupido comyntas"]<-"Everes conymtas"
-
-for(i in 1:nrow(day0.locs)) {
-  pheno10$region[pheno10$lat_bin==day0.locs$lat_bin[i] & pheno10$lon_bin== day0.locs$lon_bin[i]]<-day0.locs$region[i]
-}
-#table(pheno10$region)
-
-day0pheno<-merge(pheno10, day0, by=c("region","scientificName"), all.x=T) %>%
-  mutate(incidental=i.est-doy0, survey=p.est-doy0) %>%
-  dplyr::select(scientificName,year, lat_bin, lon_bin, region, incidental, survey) %>%
-  pivot_longer(incidental:survey, names_to="datasource", values_to="emerg.lag")
-day0pheno<-merge(day0pheno, splist[,c(1:2)], by="scientificName")
-
-
-(day0plot<-ggplot(data=day0pheno, aes(x=scientificName, y=emerg.lag, fill=datasource)) + 
-  geom_boxplot() + theme_light() + geom_hline(yintercept=7) + 
-  labs(title="", x="Species", y="# days (estimate - day0)") + 
-  scale_fill_manual(name="Data source:", labels=c("Incidental","Survey"), values=c("palegreen","dodgerblue3"),guide = guide_legend(reverse = FALSE)) + 
-  theme(legend.position='top', axis.text.x = element_text(size=8,face="italic",angle = 75, vjust = 1, hjust=1)) + 
-  scale_x_discrete(labels=sort(unique(day0pheno$sciname))) )
-
-ggsave("figs/Larsen_etal_Fig3.png", day0plot, width=6, height=5, units="in")
-
-day0lm1<-lm(emerg.lag~-1+scientificName+datasource, data=day0pheno)
-summary(day0lm1)
-#data sources not sig different but species ARE - apply traits?
-
-
 
 ###########################################
-##  FIGURE 4: Phenometrics by overwinter stage
-pheno.long<-pheno10 %>%
-  pivot_longer(c(p.est,i.est), names_to="datasource", values_to="est.10")
-pheno.long$ows<-fct_relevel(pheno.long$ows,c("adult","pupa","larva","migrant"))
-
-
-(fig4a<-ggplot(data=pheno.long, aes(x=ows,y=est.10, fill=datasource) ) + 
-  geom_boxplot() + ylim(60,300) + 
-  scale_fill_manual(name="Data source:", labels=c("Incidental","Survey"), values=c("palegreen","dodgerblue3"),guide = FALSE)  + 
-  theme_classic() + labs(x="Overwinter stage", y="10% Estimate", tag="A") )
-
-pheno50.long<-read_csv("data/midseason_indices.csv")  %>%
-  dplyr::select(scientificName,p.est,i.est,ows) %>%
-  pivot_longer(c(p.est,i.est), names_to="datasource", values_to="est.50")
-pheno50.long$ows<-fct_relevel(pheno50.long$ows,c("adult","pupa","larva","migrant"))
-
-
-(fig4b<-ggplot(data=pheno50.long, aes(x=ows,y=est.50, fill=datasource) ) + 
-  geom_boxplot() + ylim(60,300) + 
-  scale_fill_manual(name="Data source:", labels=c("Incidental","Survey"), values=c("palegreen","dodgerblue3"),guide = guide_legend(reverse = FALSE) )  + 
-  theme_classic() + labs(x="Overwinter stage", y="50% Estimate", tag="B") )
-
-# Extract the legend. Returns a gtable
-leg4 <- as_ggplot(get_legend(fig4b))
-fig4b <- fig4b + theme(legend.position='none')
-
-
-##Combine panels into Figure 4:
-figure4 <- grid.arrange(fig4a, fig4b, leg4,  ncol = 3, nrow = 1, widths=c(3,3,1))
-figure4
-ggsave("figs/Larsen_etal_Fig4.png", plot=figure4, width = 6, height = 2.5, dpi = 300, units = "in", device='png')
-
-
-
-###########################################
-## FIGURE 5: Model predictions
-#### PLOTS FOR MODEL FIT BY SPECIES WITH OVERWINTER COLOR
+## FIGURE 3: Model predictions
+#### PLOTS FOR GDD MODEL FIT BY OVERWINTER STRATEGY
 
 library(merTools)
 #load pheno data
@@ -275,20 +201,22 @@ datasets<-list(pheno10, pheno10, pheno50, pheno50)
 finalmodels<-list(best.i10, best.s10, best.i50, best.s50)
 titles<-c("B. 10% metrics from incidental data","A. 10% metrics from survey data",
           "D. 50% metrics from incidental data", "C. 50% metrics from survey data")
-fig5panels<-list()
+ylim.i<-list(c(90,220),c(90,220),c(150,260),c(150,260))
+fig3panels<-list()
 for(i in 1:4) {
   if(i %in% c(1,3)) {
     data.i<-datasets[[i]] %>% rename(est=i.est)
     } else {
-      data.i[[i]]<-datasets[[i]] %>% rename(est=p.est)
+      data.i<-datasets[[i]] %>% rename(est=p.est)
     }
   fm1 <- lm(formula=est~log.gdd+ows, data=data.i)
+  fm1<-stepAIC(fm1)
   df3 = cbind(data.i, predict(fm1,interval = "confidence"))
    
-  fig5panels[[i]]<- ggplot(data=df3, mapping=aes(x=exp(log.gdd), y=est, color=ows)) +  
+  fig3panels[[i]]<- ggplot(data=df3, mapping=aes(x=exp(log.gdd), y=est, color=ows)) +  
     geom_ribbon(data=df3, aes(x=exp(log.gdd), ymin=lwr, ymax=upr, group=ows), color="gray", size=0, fill="gray", alpha=0.6) + 
     geom_line(mapping=aes(y=fit, color=ows), size=1.5) + 
-    scale_color_viridis(discrete=TRUE) + 
+    scale_color_viridis(discrete=TRUE) + ylim(ylim.i[[i]]) +
     scale_x_continuous(name='GDD (Jan-Jun)', trans="identity", labels=waiver()) + 
     theme_classic()+labs(y="DOY prediction", title=titles[i]) + theme(legend.position = "none")
   
@@ -304,9 +232,64 @@ forlegend<-ggplot(data=df3, mapping=aes(x=exp(log.gdd), y=est, color=ows)) +
   theme_classic()+labs(y="DOY prediction", title=titles[i], legend="Overwinter stage:") + 
   theme(legend.position = "bottom", legend.text=element_text(size=13), legend.title=element_text(size=13))
 
-leg5 <- ggpubr::as_ggplot(ggpubr::get_legend(forlegend))
+leg3 <- ggpubr::as_ggplot(ggpubr::get_legend(forlegend))
 
-(fig5<-grid.arrange(fig5panels[[2]],fig5panels[[1]],fig5panels[[4]],fig5panels[[3]],leg5, nrow=3, layout_matrix = rbind(c(1,2),c(3,4),c(5,5)),heights=c(4,4,1)))
+(fig3<-grid.arrange(fig3panels[[2]],fig3panels[[1]],fig3panels[[4]],fig3panels[[3]],leg3, nrow=3, layout_matrix = rbind(c(1,2),c(3,4),c(5,5)),heights=c(4,4,1)))
  
 
-ggsave("figs/Larsen_etal_Figure5.png",fig5,width = 8, height = 8, dpi = 300, units = "in")
+ggsave("figs/Larsen_etal_Figure3.png",fig3,width = 8, height = 8, dpi = 300, units = "in")
+
+
+###########################################
+##  SUPPLEMENTAL FIGURE 1: Compare emergences to "day 0"
+
+day0pheno<-read_csv("data/day0_combined.csv")
+day0pheno<-merge(day0pheno, splist[,c(1:2)], by="scientificName")
+
+
+(day0plot<-ggplot(data=day0pheno, aes(x=scientificName, y=emerg.lag, fill=datasource)) + 
+    geom_boxplot() + theme_light() + geom_hline(yintercept=7) + 
+    labs(title="", x="Species", y="# days (estimate - day0)") + 
+    scale_fill_manual(name="Data source:", labels=c("Incidental","Survey"), values=c("palegreen","dodgerblue3"),guide = guide_legend(reverse = FALSE)) + 
+    theme(legend.position='top', axis.text.x = element_text(size=8,face="italic",angle = 75, vjust = 1, hjust=1)) + 
+    scale_x_discrete(labels=sort(unique(day0pheno$sciname))) )
+
+ggsave("figs/Larsen_etal_S2Fig1.png", day0plot, width=6, height=5, units="in")
+
+
+
+
+###########################################
+##  SUPPLEMENTAL FIGURE 2: Phenometrics by overwinter stage
+pheno.long<-pheno10 %>%
+  pivot_longer(c(p.est,i.est), names_to="datasource", values_to="est.10")
+pheno.long$ows<-fct_relevel(pheno.long$ows,c("adult","pupa","larva","migrant"))
+
+
+(fig.owsa<-ggplot(data=pheno.long, aes(x=ows,y=est.10, fill=datasource) ) + 
+    geom_boxplot() + ylim(60,300) + 
+    scale_fill_manual(name="Data source:", labels=c("Incidental","Survey"), values=c("palegreen","dodgerblue3"),guide = FALSE)  + 
+    theme_classic() + labs(x="Overwinter strategy", y="10% Estimate", tag="A") )
+
+pheno50.long<-read_csv("data/midseason_indices.csv")  %>%
+  dplyr::select(scientificName,p.est,i.est,ows) %>%
+  pivot_longer(c(p.est,i.est), names_to="datasource", values_to="est.50")
+pheno50.long$ows<-fct_relevel(pheno50.long$ows,c("adult","pupa","larva","migrant"))
+
+
+(fig.owsb<-ggplot(data=pheno50.long, aes(x=ows,y=est.50, fill=datasource) ) + 
+    geom_boxplot() + ylim(60,300) + 
+    scale_fill_manual(name="Data source:", labels=c("Incidental","Survey"), values=c("palegreen","dodgerblue3"),guide = guide_legend(reverse = FALSE) )  + 
+    theme_classic() + labs(x="Overwinter strategy", y="50% Estimate", tag="B") )
+
+# Extract the legend. Returns a gtable
+leg.ows <- as_ggplot(get_legend(fig.owsb))
+fig.owsb <- fig.owsb + theme(legend.position='none')
+
+
+##Combine panels into Figure 4:
+figures22 <- grid.arrange(fig.owsa, fig.owsb, leg.ows,  ncol = 3, nrow = 1, widths=c(3,3,1))
+figures22
+ggsave("figs/Larsen_etal_S2Fig2.png", plot=figures22, width = 6, height = 2.5, dpi = 300, units = "in", device='png')
+
+
