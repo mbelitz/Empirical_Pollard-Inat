@@ -21,16 +21,18 @@ library(MuMIn)     #MuMIn to calculate r2 for mixed models
 #load 10% incidental phenometrics, select fields, add width of confidence int.
 inat10<-read_csv("data/naive_tenth_inat_estimates.csv") %>% 
   rename(i.est=estimate, ilow=low_ci, ihigh=high_ci, i.npresence=obs) %>%
-  mutate(i.ci=ihigh-ilow, metric=10)
+  mutate(i.ci=ihigh-ilow, metric=10, scientificName=ifelse(scientificName=="Cupido comyntas","Everes comyntas", scientificName))
 
 #load 50% incidental phenometrics, select fields, add width of confidence int.
 inat50<-read_csv("data/naive_fiftieth_iNat_estimates.csv") %>% 
   rename(i.est=estimate, ilow=low_ci, ihigh=high_ci, i.npresence=obs) %>%
-  mutate(i.ci=ihigh-ilow, metric=50)
+  mutate(i.ci=ihigh-ilow, metric=50, scientificName=ifelse(scientificName=="Cupido comyntas","Everes comyntas", scientificName))
+
 
 
 #load pollard phenometrics
 load("data/pollard_indices.RData")
+survey.pheno<-survey.pheno %>% mutate(scientificName=ifelse(scientificName=="Cupido comyntas","Everes comyntas", scientificName))
 #select fields for 10% metrics, add width of confidence int.
 pollard10<-pollardM %>%
   rename(p.nsites=nsites, p.nsurveys=nvisits, p.npresence=ncounts, 
@@ -46,11 +48,11 @@ pollard50<-pollardM %>%
 
 #remove raw survey metrics table
 rm(pollardM)
-save(inat10, inat50, survey10, survey50, file="data/all_phenometrics.RData")
+save(inat10, inat50, pollard10, pollard50, file="data/all_phenometrics.RData")
 #load species traits
 #species traits from excel, filter to species with clear overwinter stage, set factors
 #wing.mean, wing.max, canopy.open, canopy.mixed, canopy.closed, host.breadth.index, voltinism, egg.clusters,
-traits<-read_excel("data/LarsenEtAl_Appendix1b.xlsx", sheet="spp_TRAITS_el") %>%
+traits<-read_csv("data/species_traits.csv") %>% #LarsenEtAl_Appendix1b.xlsx", sheet="spp_TRAITS_el") %>%
   rename(scientificName=scientific_name, local.abund=local.abundance.description, ows=overwinter.stage, mobility=Mobility_code, detect=detectability.index, confus = Confusability) %>%
   filter(ows %in% c("adult","pupa","larva","migrant")) %>%
   mutate(ows=as.factor(ows),
@@ -81,7 +83,7 @@ gdd<-gdd %>%
 #10% phenometric dataset (emergence) 
 #combine metrics from surveys and incidental data in one dataframe
 pheno10<-merge(pollard10, inat10, by=intersect(names(inat10), names(pollard10))) 
-write.csv(pheno10, file="data/emergence_metrics.csv")
+#write.csv(pheno10, file="data/emergence_metrics.csv")
 #add gdd (by year-grid cell) to dataframe
 pheno10<-merge(pheno10, gdd, by=intersect(names(pheno10), names(gdd)))
 #add traits (by species) to dataframe
@@ -99,12 +101,15 @@ sort(unique(pheno10$year))
 #50% dataset (mid-season)
 #combine metrics from surveys and incidental data in one dataframe
 pheno50<-merge(pollard50, inat50, by=intersect(names(inat50), names( pollard50)))
+#write.csv(pheno50, file="data/midseason_metrics.csv")
 #add gdd (by year-grid cell) to dataframe
 pheno50<-merge(pheno50, gdd, by=intersect(names(pheno50), names(gdd)))
 #add traits (by species) to dataframe
 pheno50<-merge(pheno50,traits, by.x="scientificName", by.y="scientificName")
 
 rm(gdd, inat10, inat50, p.mat, pollard10, pollard50, traits)
+
+#Separate data frames by data source, also change units of wing span to cm.
 survey10<-pheno10 %>% dplyr::select(scientificName,p.est,log.gdd:confus) %>% mutate(wing.mean=wing.mean/10, wing.max=wing.max/10)
 survey50<-pheno50 %>% dplyr::select(scientificName,p.est,log.gdd:confus) %>% mutate(wing.mean=wing.mean/10, wing.max=wing.max/10)
 incid10<-pheno10 %>% dplyr::select(scientificName,i.est,log.gdd:confus) %>% mutate(wing.mean=wing.mean/10, wing.max=wing.max/10)
@@ -121,14 +126,12 @@ day0.locs<-read_csv("data/day0regions.csv")
 day0<-read_csv("data/day0values.csv") %>%
   pivot_longer(`DC`:`IA`, names_to = "region", values_to="doy0") %>%
   rename(scientificName=Species)
-day0$scientificName[day0$scientificName=="Cupido comyntas"]<-"Everes conymtas"
 
 
+load("data/all_phenometrics.RData")
 
-
-day0.emerg<-read_csv("data/emergence_indices.csv") %>% 
-  dplyr::select(scientificName:ihigh, ows) %>%  mutate(region=NA) 
-day0.emerg$scientificName[day0.emerg$scientificName=="Cupido comyntas"]<-"Everes conymtas"
+day0.emerg<-merge(inat10, pollard10) %>% 
+  mutate(region=NA) 
 
 for(i in 1:nrow(day0.locs)) {
   day0.emerg$region[day0.emerg$lat_bin==day0.locs$lat_bin[i] & day0.emerg$lon_bin== day0.locs$lon_bin[i]]<-day0.locs$region[i]
@@ -140,11 +143,12 @@ day0pheno<-merge(day0.emerg, day0, by=c("region","scientificName"), all.x=T) %>%
   dplyr::select(scientificName,year, lat_bin, lon_bin, region, incidental, survey) %>%
   pivot_longer(incidental:survey, names_to="datasource", values_to="emerg.lag")
 
+write.csv(day0pheno, file="data/day0_combined.csv")
 rm(day0, day0.locs)
 #How many are <0?
 #Incidental
-inc0<-round(nrow(filter(day0pheno, emerg.lag<0,datasource=="incidental"))/nrow(filter(day0pheno, datasource=="incidental")),3)
-surv0<-round(nrow(filter(day0pheno, emerg.lag<0,datasource=="survey"))/nrow(filter(day0pheno, datasource=="survey")),3)
+(inc0<-round(nrow(filter(day0pheno, emerg.lag<0,datasource=="incidental"))/nrow(filter(day0pheno, datasource=="incidental")),3))
+(surv0<-round(nrow(filter(day0pheno, emerg.lag<0,datasource=="survey"))/nrow(filter(day0pheno, datasource=="survey")),3))
 
 #Test if incidental metrics are consistently earlier for any species
 
@@ -152,7 +156,7 @@ surv0<-round(nrow(filter(day0pheno, emerg.lag<0,datasource=="survey"))/nrow(filt
 (day0.bias<-day0.emerg %>% mutate(surveylag=p.est-i.est, lagsign=sign(surveylag)) %>%
   group_by(scientificName) %>% 
   summarize(howmuch=sum(surveylag)/length(surveylag),nearly=sum(lagsign), bias=sum(lagsign)/length(surveylag), nmetrics=length(surveylag))  %>%
-  filter(bias>0.5 | bias< (-0.5), nmetrics>1) )
+  filter(bias>0.6 | bias< (-0.6), nmetrics>1) )
   
 
 et<-as.data.frame(summary(lm(emerg.lag~datasource*scientificName, data=day0pheno))$coefficients)

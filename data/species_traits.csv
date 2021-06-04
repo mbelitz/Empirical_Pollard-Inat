@@ -1,0 +1,34 @@
+scientific_name,Mobility_code,wing.max,wing.mean,canopy.open,canopy.mixed,canopy.closed,local.abundance.description,host.breadth.index,voltinism,Voltinism.description,overwinter.stage,egg.clusters,detectability.index,confusability.index,Confusability
+Ancyloxypha numitor,1,28,23,1,0,0,Common,2,3,Multivoltine,larva,0,2,Low,1
+Asterocampa celtis,1,66,53,0,1,0,Common,1,3,Multivoltine,larva,1,1,Medium - Easily confused with Tawny emperor where they overlap,2
+Atalopedes campestris,4,41,34.5,1,1,0,Common,2,3,Multivoltine,migrant,0,2,Medium,2
+Cercyonis pegala,1,76,62,1,1,0,Common,2,1,Univoltine,larva,0,3,Low,1
+Colias eurytheme,4,68,53.5,1,1,0,Common,2,3,Multivoltine,larva,0,3,Orange usually easy to see in summer but people often confuse with C. philodice,3
+Colias philodice,4,70,56,1,0,0,Common,2,3,Multivoltine,larva,0,3,Never orange but pale yellow form of C. eurythem easy to confuse,3
+Everes comyntas,1,29,23.5,1,1,0,Common,2,3,Multivoltine,larva,0,2,Low,1
+Danaus plexippus,5,114,95,1,1,0,Common,2,3,Multivoltine,migrant,0,3,Low,1
+Epargyreus clarus,2,61,51,1,1,0,Common,2,3,Multivoltine,pupa,0,3,Low,1
+Erynnis baptisiae,1,45,39,1,1,0,Common,2,2,Mostly two,larva,0,1,High lots of very similar Erynnis out there!,4
+Euptoieta claudia,4,80,58,1,0,0,Uncommon,3,3,Multivoltine,migrant,0,3,Low ,1
+Eurytides marcellus,4,102,78,1,1,1,Common,1,3,Multivoltine,pupa,0,3,Low,1
+Junonia coenia,5,69,52.5,1,1,0,Common,3,3,Multivoltine,migrant,0,2,Low,1
+Limenitis archippus,2,76,67,1,1,1,Common,2,3,Multivoltine,larva,0,3,"Medium, can be mistaken for monarch, but is generally distinguishable",2
+Limenitis arthemis astyanax,4,92,79,0,1,1,Uncommon,3,3,Multivoltine,larva,0,3,Low,1
+Megisto cymela,1,48,40.5,0,1,1,Common,1,3,Univoltine,larva,0,3,Low,1
+Nastra lherminier,1,28,25.5,1,0,0,Uncommon,1,3,Multivoltine,unknown,0,1,High,4
+Nymphalis antiopa,5,102,89,0,1,1,Uncommon,3,3,Multivoltine,adult,1,2,Low,1
+Papilio glaucus,2,165,127,1,1,1,Common,3,3,Multivoltine,pupa,0,4,Low,1
+Papilio polyxenes,2,113,88.5,1,1,0,Common,2,3,Multivoltine,pupa,0,3,"Medium, one of several species that mimic pipevine, but it can usually be distinguished",3
+Papilio troilus,4,130,104,0,1,1,Uncommon,1,3,Multivoltine,pupa,0,3,"Medium, one of several species that mimic pipevine, but it can usually be distinguished",3
+Phyciodes tharos,1,41,27.5,1,1,0,Common,1,3,Multivoltine,larva,1,2,"Low, several similar species but this is the most common and can usually be distinguished",2
+Pieris rapae,4,50,44,1,0,0,Common,2,3,Multivoltine,pupa,0,3,"Low, several similar species, but in most of this range, they are by far the most common med-sized white, clear field marks",2
+Poanes zabulon,2,39,32.5,0,1,1,Common,1,3,Multivoltine,unknown,0,1,"Medium, several similar species, but can be distinguished with good look",3
+Polites peckius,2,31,30.5,1,0,0,Common,1,2,Bivoltine,larva and pupa?,0,2,Medium,2
+Polites themistocles,2,36,28,1,0,0,Common,1,3,Multivoltine,pupa,0,1,"Medium, several similar species, but can be distinguished with good look",3
+Polygonia comma,2,54,49.5,0,1,1,Common,2,3,Multivoltine,adult,1,2,"Medium, hard to distinguish from P. interrogationnis without a good look",3
+Polygonia interrogationis,4,76,62,0,1,1,Common,2,3,Multivoltine,adult,1,2,"Medium, hard to distinguish from P. comma without a good look",3
+Pyrgus communis,2,32,26,1,1,0,Uncommon,2,3,Multivoltine,larva,0,2,Low,1
+Speyeria cybele,3,100,85.5,1,1,0,Common,1,1,Univoltine,larva,0,3,Low,1
+Vanessa atalanta,5,70,60,1,1,0,Common,1,3,Multivoltine,adult,0,2,Low,1
+Vanessa cardui,5,75,60,1,0,0,Common,3,3,Multivoltine,migrant,0,2,"Medium, can be mistaken for V. virginiensis",3
+Vanessa virginiensis,4,67,55.5,1,1,0,Common,3,3,Multivoltine,adult,0,2,"Medium, can be mistaken for V. cardui",3
