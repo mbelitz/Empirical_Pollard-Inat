@@ -120,8 +120,8 @@ year.f2<-2017
 sp.f2<-"Speyeria cybele"
 #Survey data
 load("data/survey_speyeria.RData")
-tenth.ci<-quantile(boot.out$t[,366], probs=c(0.025,0.975))
-fiftieth.ci<-quantile(boot.out$t[,367], probs=c(0.025,0.975))
+tenth.ci<-quantile(boot.out$t[,1], probs=c(0.025,0.975))
+fiftieth.ci<-quantile(boot.out$t[,2], probs=c(0.025,0.975))
 
 survey_samp<-read_csv("data/survey_speyeriadata.csv") %>%
   mutate(npres=ifelse((COUNT==0),0,1))
@@ -129,8 +129,8 @@ survey_samp<-read_csv("data/survey_speyeriadata.csv") %>%
 
 surv.speyeria<-data.frame(yday=numeric(),est=numeric(),lowci=numeric(),highci=numeric())
 for(i in 1:365) { #loop through days of year
-  result.ci<-boot.ci(boot.out, index=i, conf = 0.95, type = "perc")
-  surv.speyeria[nrow(surv.speyeria)+1,]<-c(i,boot.out$t0[i], round(result.ci$percent[4],4), round(result.ci$percent[5],4))
+  result.ci<-boot.ci(boot.out, index=i+2, conf = 0.95, type = "perc")
+  surv.speyeria[nrow(surv.speyeria)+1,]<-c(i,boot.out$t0[i+2], round(result.ci$percent[4],4), round(result.ci$percent[5],4))
 }
 
 surv.speyeria<-surv.speyeria %>%
@@ -145,8 +145,8 @@ for(i in c(2:365)) {surv.speyeria$dailyprob[i]<-(surv.speyeria$est[i]-surv.speye
     geom_line(data=filter(surv.speyeria,yday<361), aes(x=yday,y=dailyprob)) +
     #  geom_vline(xintercept=round(tenth.ci$percent[4]),color="black", linetype=3) +
     #  geom_vline(xintercept=round(tenth.ci$percent[5]),color="black", linetype=2) +
-    geom_vline(xintercept=boot.out$t0[366], linetype=3) +
-    geom_vline(xintercept=boot.out$t0[367], linetype=2) +
+    geom_vline(xintercept=boot.out$t0[1], linetype=3) +
+    geom_vline(xintercept=boot.out$t0[2], linetype=2) +
     xlim(100,320) + theme_classic() + theme(axis.text.y = element_blank()) +
     geom_histogram(data=survey_samp, aes(x=yday, fill = as.factor(npres)), colour="black", binwidth=7,  inherit.aes=F) + #xlim(190, 230) +
     scale_fill_manual(values=c("white","black"), guide=F) +

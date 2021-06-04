@@ -32,7 +32,7 @@ inat50<-read_csv("data/naive_fiftieth_iNat_estimates.csv") %>%
 
 #load pollard phenometrics
 load("data/pollard_indices.RData")
-pollardM<-pollardM %>% mutate(scientificName=ifelse(scientificName=="Cupido comyntas","Everes comyntas", scientificName))
+survey.pheno<-survey.pheno %>% mutate(scientificName=ifelse(scientificName=="Cupido comyntas","Everes comyntas", scientificName))
 #select fields for 10% metrics, add width of confidence int.
 pollard10<-pollardM %>%
   rename(p.nsites=nsites, p.nsurveys=nvisits, p.npresence=ncounts, 

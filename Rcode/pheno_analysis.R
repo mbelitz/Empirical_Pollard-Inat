@@ -10,6 +10,12 @@
 #load phenometrics and explanatory variables
 source("Rcode/pheno_data.R")
 
+
+#load project functions
+source("Rcode/project_functions.R")
+
+
+
 #wing.mean and wing.max are highly correlated, so remove wing.mean
 incid10<-incid10 %>% dplyr::select(!wing.mean)
 survey10<-survey10 %>% dplyr::select(!wing.mean)
@@ -148,31 +154,7 @@ best.i50<-f3fin
 params.10<-c("log.gdd","adult diapause (0/1)","pupal diapause (0/1)","larval diapause (0/1)","migrant (0/1)","locally common (0/1)","marginal r2","conditional r2")
 params.50<-c("adult diapause (0/1)","pupal diapause (0/1)","larval diapause (0/1)","migrant (0/1)","host breadth index","marginal r2","conditional r2")
 
-##Function to extract parameters of interest from best models
-getparamests<-function(model.survey, model.inc) {
-  surv<-summary(model.survey)$coefficients
-  inc<-summary(model.inc)$coefficients
-  ms1<-cbind(round(surv[,1],1),round(surv[,2],1),surv[,5])
-  mi1<-cbind(round(inc[,1],1),round(inc[,2],1),inc[,5])
-  if(nrow(ms1)>nrow(mi1)) {
-    nparam<-nrow(ms1)
-    while(nrow(mi1)< nparam) {mi1<-rbind(mi1,c(rep(NA,3))) }
-    row.names(mi1)<-row.names(ms1)
-  } else {
-    nparam<-nrow(mi1)
-    while(nrow(ms1)< nparam) {ms1<-rbind(ms1,c(rep(NA,3))) }
-    row.names(ms1)<-row.names(mi1)
-    }
-  r2s<-cbind(round(t(r.squaredGLMM(model.survey)),2),c(NA,NA),c(NA,NA))
-  r2i<-cbind(round(t(r.squaredGLMM(model.inc)),2),c(NA,NA),c(NA,NA))
-  
-  ms1<-rbind(ms1,r2s) 
-  mi1<-rbind(mi1,r2i)
-  table.out<-as.data.frame(cbind(ms1,mi1))
-  names(table.out)<-c("Survey Estimate","Surv. SE","Surv. p value","Incidental Estimate","Inc. SE","Inc. p value")
-  return(table.out)  
-}
-
+#Use getparamests function from project_functions.R
 #Create tables with model output
 (table10<-getparamests(best.s10,best.i10))
 (table50<-getparamests(best.s50,best.i50))
