@@ -1,4 +1,4 @@
-source("Rcode/set_up_naive_estimates.R")
+source("Rcode/set_up_pheno_estimates.R")
 
 ## Generate spp specific pheno estimates. Note these estimates will take a bit to run
 Danaus_plexippus <- obs_to_estimate("Danaus plexippus", fiftiethfun)
